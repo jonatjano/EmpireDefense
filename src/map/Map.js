@@ -1,6 +1,7 @@
 import Cell from "./Cell.js";
 import AbstractEntity from "../entity/AbstractEntity.js";
 import utils from "../utils.js";
+import PathFinder from "./Pathfinder.js";
 
 export default class Map {
 	/**
@@ -33,6 +34,12 @@ export default class Map {
 	 * @type { Set<Building> }
 	 */
 	#buildings = new Set()
+	/**
+	 * flag to indicate when pathfinding must be recalculated
+	 * @type {boolean}
+	 */
+	#needPathUpdate = true
+	#pathfinder
 
 	/**
 	 * use {@link Map.fromBoard} for input validation
@@ -56,14 +63,22 @@ export default class Map {
 
 		Object.freeze(this.#spawns)
 		Object.freeze(this.#goals)
+		this.#pathfinder = new PathFinder(this)
 	}
 
 	get spawns() { return this.#spawns }
 	get goals() { return this.#goals }
 	get height() { return this.#height }
 	get width() { return this.#width }
+	get pathfinder() { return this.#pathfinder }
 
-	getCellAt(x, y) { return this.#board[y][x] }
+	get needPathUpdate() {
+		const ret = this.#needPathUpdate
+		this.#needPathUpdate = false
+		return ret
+	}
+
+	getCellAt(x, y) { return this.#board?.[y]?.[x] }
 
 	addUnit(unit) {
 		this.#units.add(unit)
@@ -112,9 +127,11 @@ export default class Map {
 		const building = template.clone(x, y)
 		this.#board[y][x].build(building)
 		this.addBuilding(building)
+		this.#needPathUpdate = true
 	}
 	destroyAt(x, y) {
 		this.deleteBuilding(this.#board[y][x].destroy())
+		this.#needPathUpdate = true
 	}
 	addBuilding(building) {
 		this.#buildings.add(building)
@@ -164,10 +181,13 @@ export default class Map {
 		const board = []
 		board.push(Array(width + 2).fill(Cell.WALL))
 		for (let i = 0; i < height; i++) {
+			// const subArray = [i === Math.floor(height/2)-1 || i === 8 || i === 1 ? Cell.SPAWN : Cell.WALL]
 			const subArray = [i === Math.floor(height/2)-1 ? Cell.SPAWN : Cell.WALL]
 			for (let j = 0; j < width; j++) {
+				// subArray.push(new Cell(j !== 5 || (i > 1 && i < 4), true))
 				subArray.push(new Cell(true, true))
 			}
+			// subArray.push(i === Math.floor(height/2)-1 || i === 8 || i === 1 ? Cell.GOAL : Cell.WALL)
 			subArray.push(i === Math.floor(height/2)-1 ? Cell.GOAL : Cell.WALL)
 			board.push(subArray)
 		}

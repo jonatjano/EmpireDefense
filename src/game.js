@@ -4,8 +4,10 @@ import Building from "./Building.js";
 import Map from "./map/Map.js"
 import draw from "./UI/draw.js";
 import "./UI/events.js"
+import GroundEnemy from "./entity/GroundEnemy.js";
 
 let lastLoop = 0
+const MONSTER_INTERVAL = 1000
 
 utils.canvas.preparedCanvasAndContext
 globalThis.map = Map.fromDimensions(20, 10)
@@ -13,11 +15,13 @@ globalThis.map = Map.fromDimensions(20, 10)
 
 const gameLoop = time => {
 	const interval = time - lastLoop
+	globalThis.map.pathfinder.act()
+
 	globalThis.map.forEachUnit(unit => { unit.act(interval) })
 	globalThis.map.forEachBuilding(building => { building.act(interval) })
 
-	if (time % 1000 < lastLoop % 1000 || lastLoop === 0) {
-		globalThis.map.addUnit(new Enemy(globalThis.map.spawns[0].x + 0.5, globalThis.map.spawns[0].y + 0.5))
+	if (time % MONSTER_INTERVAL < lastLoop % MONSTER_INTERVAL || lastLoop === 0) {
+		globalThis.map.addUnit(new GroundEnemy(globalThis.map.spawns[0].x + 0.5, globalThis.map.spawns[0].y + 0.5))
 	}
 
 	draw(globalThis.map)
@@ -34,4 +38,4 @@ gameLoop(0)
 // board[5][2].build(Building.archerTower(2, 5))
 // board[6][1].build(Building.archerTower(1, 6))
 // board[8][2].build(Building.archerTower(2, 8))
-globalThis.map.buildAt(20, 1, Building.ARCHER_TOWER)
+// globalThis.map.buildAt(20, 1, Building.ARCHER_TOWER)

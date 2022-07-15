@@ -3,8 +3,8 @@ import AbstractEntity from "./AbstractEntity.js";
 export default class Enemy extends AbstractEntity {
 	style = Object.freeze({size: 40, color: "red"})
 
-	constructor(x, y, life = 10) {
-		super(x, y, 3, life)
+	constructor(x, y, speed = 3, life = 10) {
+		super(x, y, speed, life)
 	}
 
 	act(timeSinceLastCall) {

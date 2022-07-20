@@ -2,6 +2,7 @@ import Cell from "./Cell.js";
 import AbstractEntity from "../entity/AbstractEntity.js";
 import utils from "../utils.js";
 import PathFinder from "./Pathfinder.js";
+import GroundEnemy from "../entity/GroundEnemy.js";
 
 export default class Map {
 	/**
@@ -124,10 +125,14 @@ export default class Map {
 	}
 
 	buildAt(x, y, template) {
-		const building = template.clone(x, y)
-		this.#board[y][x].build(building)
-		this.addBuilding(building)
-		this.#needPathUpdate = true
+		const cell = this.#board[y][x]
+		const groundUnitOnCell = [...this.#units].some(unit => unit instanceof GroundEnemy && Math.floor(unit.x) === x && Math.floor(unit.y) === y)
+		if (cell.isBuildable && ! groundUnitOnCell) {
+			const building = template.clone(x, y)
+			cell.build(building)
+			this.addBuilding(building)
+			this.#needPathUpdate = true
+		}
 	}
 	destroyAt(x, y) {
 		this.deleteBuilding(this.#board[y][x].destroy())

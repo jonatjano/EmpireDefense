@@ -190,7 +190,11 @@ export default class Map {
 			const subArray = [i === Math.floor(height/2)-1 ? Cell.SPAWN : Cell.WALL]
 			for (let j = 0; j < width; j++) {
 				// subArray.push(new Cell(j !== 5 || (i > 1 && i < 4), true))
-				subArray.push(new Cell(true, true))
+				if (i === Math.floor(height/2)-1 && j === Math.floor(width/2)-1) {
+					subArray.push(Cell.GOAL)
+				} else {
+					subArray.push(new Cell(true, true))
+				}
 			}
 			// subArray.push(i === Math.floor(height/2)-1 || i === 8 || i === 1 ? Cell.GOAL : Cell.WALL)
 			subArray.push(i === Math.floor(height/2)-1 ? Cell.GOAL : Cell.WALL)

@@ -14,6 +14,19 @@ export default function(map) {
 		}
 	}
 
+	for (let i = 0; i < map.width; i++) {
+		for (let j = 0; j < map.height; j++) {
+			try {
+				const next = map.pathfinder.next({x: i, y: j})
+				ctx.fillStyle = "black"
+				ctx.font = `${rectHeight * 0.3}px ubuntu`
+				ctx.textBaseline = "middle"
+				ctx.textAlign = "center"
+				ctx.fillText(Math.floor(next.x) + " " + Math.floor(next.y) + " " + next.cost, rectWidth * (i + 0.5), rectHeight * (j + 0.5))
+			} catch (e) {}
+		}
+	}
+
 	// draw units
 	globalThis.map.forEachUnit(unit => {
 		const style = unit.style

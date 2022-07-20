@@ -1,3 +1,5 @@
+import Cell from "./Cell.js";
+
 export default class PathFinder {
 	/**
 	 * @type {Map}
@@ -8,6 +10,11 @@ export default class PathFinder {
 	 * @type { {[x: uint]: {[y: uint]: {x: uint, y: uint, cost: uint} } } }
 	 */
 	#paths
+
+	/**
+	 * @type { {x: uint, y: uint}[] }
+	 */
+	#criticalCells
 
 	/**
 	 * @param {Map} map
@@ -22,6 +29,7 @@ export default class PathFinder {
 			for (const goal of this.#map.goals) {
 				this.#calculateBestPath(goal)
 			}
+			// this.#calculateCriticalCells(goal)
 		}
 	}
 
@@ -44,10 +52,12 @@ export default class PathFinder {
 		}
 	}
 
+	isCritical(x, y) {
+		return this.#criticalCells.some(cell => cell.x === x && cell.y === y)
+	}
+
 	next(point) {
-		// console.log(point, this.#paths[Math.floor(point.x)][Math.floor(point.y)])
 		const cellPos = this.#paths[Math.floor(point.x)][Math.floor(point.y)]
-		return {x: cellPos.x + 0.5, y: cellPos.y + 0.5}
-		// return {x: point.x + 100, y: point.y}
+		return {x: cellPos.x + 0.5, y: cellPos.y + 0.5, cost: cellPos.cost}
 	}
 }

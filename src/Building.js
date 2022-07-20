@@ -32,7 +32,7 @@ export default class Building {
 	static ARCHER_TOWER = Object.freeze(
 		new Building(1, {body: "FF0000", head: "0000FF"}, Enemy, function(tower, level, enemies, boost) {
 			globalThis.map.addUnit(new Projectile(tower.x + 0.5, tower.y + 0.5, 20 * boost.projectileSpeedMultiplier, enemies[0], target => target.hit(level + 1)))
-		}, _ => 500, _ => 5, 5)
+		}, _ => 500, _ => /*5*/0, 5)
 	)
 	static RANGE_BOOSTER_TOWER = Object.freeze(
 		new Building(2, {body: "FF00FF", head: "FFFF00"}, Building, function(tower, level, buildings) {

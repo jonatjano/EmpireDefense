@@ -4,7 +4,7 @@ export default class GroundEnemy extends Enemy {
 	style = Object.freeze({size: 40, color: "pink"})
 
 	constructor(x, y, life = 10) {
-		super(x, y, 15, 10000)
+		super(x, y, 50, 10000)
 	}
 
 	act(timeSinceLastCall) {

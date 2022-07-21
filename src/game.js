@@ -39,7 +39,7 @@ gameLoop(0)
 // board[6][1].build(Building.archerTower(1, 6))
 // board[8][2].build(Building.archerTower(2, 8))
 // globalThis.map.buildAt(20, 1, Building.ARCHER_TOWER)
-
+/*
 globalThis.map.buildAt(1, 6, Building.ARCHER_TOWER)
 globalThis.map.buildAt(2, 6, Building.ARCHER_TOWER)
 globalThis.map.buildAt(2, 5, Building.ARCHER_TOWER)
@@ -76,7 +76,6 @@ globalThis.map.buildAt(9, 6, Building.ARCHER_TOWER)
 globalThis.map.buildAt(14, 7, Building.ARCHER_TOWER)
 globalThis.map.buildAt(14, 8, Building.ARCHER_TOWER)
 globalThis.map.buildAt(14, 9, Building.ARCHER_TOWER)
-globalThis.map.buildAt(20, 5, Building.ARCHER_TOWER)
 globalThis.map.buildAt(8, 6, Building.ARCHER_TOWER)
 globalThis.map.buildAt(8, 7, Building.ARCHER_TOWER)
 globalThis.map.buildAt(8, 8, Building.ARCHER_TOWER)
@@ -88,3 +87,11 @@ globalThis.map.buildAt(5, 9, Building.ARCHER_TOWER)
 globalThis.map.buildAt(3, 9, Building.ARCHER_TOWER)
 globalThis.map.buildAt(2, 9, Building.ARCHER_TOWER)
 
+globalThis.map.buildAt(15, 2, Building.ARCHER_TOWER)
+globalThis.map.buildAt(16, 2, Building.ARCHER_TOWER)
+globalThis.map.buildAt(17, 2, Building.ARCHER_TOWER)
+globalThis.map.buildAt(15, 9, Building.ARCHER_TOWER)
+globalThis.map.buildAt(16, 9, Building.ARCHER_TOWER)
+globalThis.map.buildAt(17, 9, Building.ARCHER_TOWER)
+
+*/

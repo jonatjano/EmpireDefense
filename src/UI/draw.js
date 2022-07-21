@@ -22,7 +22,7 @@ export default function(map) {
 				ctx.font = `${rectHeight * 0.3}px ubuntu`
 				ctx.textBaseline = "middle"
 				ctx.textAlign = "center"
-				ctx.fillText(Math.floor(next.x) + " " + Math.floor(next.y) + " " + next.cost, rectWidth * (i + 0.5), rectHeight * (j + 0.5))
+				ctx.fillText(Math.floor(next.x) + " " + Math.floor(next.y) + " " + map.pathfinder.canBuildAt({x: i, y: j}), rectWidth * (i + 0.5), rectHeight * (j + 0.5))
 			} catch (e) {}
 		}
 	}

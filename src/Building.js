@@ -3,19 +3,19 @@ import Projectile from "./entity/Projectile.js";
 import Enemy from "./entity/Enemy.js";
 
 /**
- * @typedef {AbstractEntity | Building} targetType
+ * @typedef { AbstractEntity | Building } targetType
  */
 /**
  * @callback BuildingAction
- * @param {Building} building
- * @param {uint} buildingLevel
+ * @param { Building } building
+ * @param { uint } buildingLevel
  * @param { targetType[] } targets
- * @param {BuildingBoost} boost
+ * @param { BuildingBoost } boost
  */
 /**
  * @callback BuildingByLevelValue
- * @param {uint} buildingLevel
- * @return {uint}
+ * @param { uint } buildingLevel
+ * @return { uint }
  */
 
 class BuildingBoost {

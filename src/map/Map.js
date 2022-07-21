@@ -125,6 +125,7 @@ export default class Map {
 	}
 
 	buildAt(x, y, template) {
+		if (! this.#pathfinder.canBuildAt({x, y})) { return }
 		const cell = this.#board[y][x]
 		const groundUnitOnCell = [...this.#units].some(unit => unit instanceof GroundEnemy && Math.floor(unit.x) === x && Math.floor(unit.y) === y)
 		if (cell.isBuildable && ! groundUnitOnCell) {
@@ -186,15 +187,10 @@ export default class Map {
 		const board = []
 		board.push(Array(width + 2).fill(Cell.WALL))
 		for (let i = 0; i < height; i++) {
-			// const subArray = [i === Math.floor(height/2)-1 || i === 8 || i === 1 ? Cell.SPAWN : Cell.WALL]
+			// const subArray = [i === Math.floor(height/2)-1 || i === 8 ? Cell.SPAWN : Cell.WALL]
 			const subArray = [i === Math.floor(height/2)-1 ? Cell.SPAWN : Cell.WALL]
 			for (let j = 0; j < width; j++) {
-				// subArray.push(new Cell(j !== 5 || (i > 1 && i < 4), true))
-				if (i === Math.floor(height/2)-1 && j === Math.floor(width/2)-1) {
-					subArray.push(Cell.GOAL)
-				} else {
-					subArray.push(new Cell(true, true))
-				}
+				subArray.push(new Cell(true, true))
 			}
 			// subArray.push(i === Math.floor(height/2)-1 || i === 8 || i === 1 ? Cell.GOAL : Cell.WALL)
 			subArray.push(i === Math.floor(height/2)-1 ? Cell.GOAL : Cell.WALL)

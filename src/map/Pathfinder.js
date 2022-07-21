@@ -38,9 +38,11 @@ export default class PathFinder {
 	 * @param {uint} cost
 	 */
 	#calculateBestPath(to, cost = 0) {
+
 		const adjacent = [{x:-1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:0, y:1}]
-		for (const from of adjacent) {
-			const cellPos = {x: to.x + from.x, y: to.y + from.y}
+			.map(delta => ({x: to.x + delta.x, y: to.y + delta.y}))
+
+		for (const cellPos of adjacent) {
 			const cell = this.#map.getCellAt(cellPos.x, cellPos.y)
 			if (cell?.isWalkable) {
 				if ((this.#paths[cellPos.x]?.[cellPos.y]?.cost ?? Infinity) > cost + 1) {
@@ -50,6 +52,43 @@ export default class PathFinder {
 				}
 			}
 		}
+
+	}
+
+	/**
+	 * @param { {x: uint, y: uint} } to
+	 * @param { {[x: uint]: {[y: uint]: true } } } state
+	 */
+	#calculateIfConnectedToSpawn(to, state) {
+
+		if (this.#map.getCellAt(to.x, to.y) === Cell.SPAWN) {
+			return true
+		}
+
+		const adjacent = [{x:-1, y:0}, {x:0, y:-1}, {x:1, y:0}, {x:0, y:1}]
+			.map(delta => ({x: to.x + delta.x, y: to.y + delta.y}))
+
+		for (const cellPos of adjacent) {
+			const cell = this.#map.getCellAt(cellPos.x, cellPos.y)
+			if (cell?.isWalkable && state[cellPos.x]?.[cellPos.y] !== true) {
+				state[cellPos.x] = {...state[cellPos.x], [cellPos.y]: true}
+				if (this.#calculateIfConnectedToSpawn(cellPos, state)) {
+					return true
+				}
+			}
+		}
+
+		return false
+	}
+
+	canBuildAt({x, y}) {
+		for (const goal of this.#map.goals) {
+			const prestate = {[x]: {[y]: true}}
+			if (this.#calculateIfConnectedToSpawn(goal, prestate) === false) {
+				return false
+			}
+		}
+		return true
 	}
 
 	isCritical(x, y) {
@@ -58,6 +97,6 @@ export default class PathFinder {
 
 	next(point) {
 		const cellPos = this.#paths[Math.floor(point.x)][Math.floor(point.y)]
-		return {x: cellPos.x + 0.5, y: cellPos.y + 0.5, cost: cellPos.cost}
+		return {x: cellPos.x + 0.5, y: cellPos.y + 0.5, cost: cellPos.cost, touchGoal: cellPos.touchGoal}
 	}
 }

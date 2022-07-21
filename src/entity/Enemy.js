@@ -1,4 +1,4 @@
-import AbstractEntity from "./AbstractEntity.js";
+import AbstractEntity from "./AbstractEntity.js"
 
 export default class Enemy extends AbstractEntity {
 	style = Object.freeze({size: 40, color: "red"})

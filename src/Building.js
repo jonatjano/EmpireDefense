@@ -1,6 +1,6 @@
 import utils from "./utils.js";
 import Projectile from "./entity/Projectile.js";
-import Enemy from "./entity/Enemy.js";
+import {Enemy, FlyingEnemy, GroundEnemy} from "./entity/enemyExport.js";
 
 /**
  * @typedef { AbstractEntity | Building } targetType
@@ -27,15 +27,26 @@ class BuildingBoost {
 	}
 }
 
+const HIDDEN_RANGE_ADDED = 0.7
 
 export default class Building {
 	static ARCHER_TOWER = Object.freeze(
 		new Building(1, {body: "FF0000", head: "0000FF"}, Enemy, function(tower, level, enemies, boost) {
 			globalThis.map.addUnit(new Projectile(tower.x + 0.5, tower.y + 0.5, 20 * boost.projectileSpeedMultiplier, enemies[0], target => target.hit(level + 1)))
-		}, _ => 500, _ => /*5*/0, 5)
+		}, _ => 250, _ => 1, 5)
+	)
+	static CANNON_TOWER = Object.freeze(
+		new Building(2, {body: "000000", head: "FFFFFF"}, GroundEnemy, function(tower, level, enemies, boost) {
+			globalThis.map.addUnit(new Projectile(tower.x + 0.5, tower.y + 0.5, 50 * boost.projectileSpeedMultiplier, enemies[0], target => target.hit((level + 2) ** 2)))
+		}, _ => 1000, _ => 1, 20)
+	)
+	static BALLISTA_TOWER = Object.freeze(
+		new Building(3, {body: "00FF00", head: "008800"}, FlyingEnemy, function(tower, level, enemies, boost) {
+			globalThis.map.addUnit(new Projectile(tower.x + 0.5, tower.y + 0.5, 30 * boost.projectileSpeedMultiplier, enemies[0], target => target.hit(level + 1)))
+		}, _ => 500, _ => 5, 25)
 	)
 	static RANGE_BOOSTER_TOWER = Object.freeze(
-		new Building(2, {body: "FF00FF", head: "FFFF00"}, Building, function(tower, level, buildings) {
+		new Building(4, {body: "FF00FF", head: "FFFF00"}, Building, function(tower, level, buildings) {
 			for (const building of buildings) {
 				building.boost(this,
 					new BuildingBoost(200, {rangeMultiplier: 2 + level, projectileSpeedMultiplier: 2 + level})
@@ -43,6 +54,8 @@ export default class Building {
 			}
 		}, _ => 100, _ => 1, 5)
 	)
+
+	static list = Object.freeze([this.ARCHER_TOWER, this.CANNON_TOWER, this.BALLISTA_TOWER, this.RANGE_BOOSTER_TOWER])
 
 	/**
 	 * @type {uint}
@@ -139,10 +152,10 @@ export default class Building {
 			let targets
 			switch (this.#targetType) {
 				case Building:
-					targets = globalThis.map.buildingsInRange(this, this.#range(this.#level) * effective.rangeMultiplier + 0.5).filter(target => target.#id !== this.#id)
+					targets = globalThis.map.buildingsInRange(this, this.#range(this.#level) * effective.rangeMultiplier + HIDDEN_RANGE_ADDED).filter(target => target.#id !== this.#id)
 					break
 				default:
-					targets = globalThis.map.unitsInRange(this, this.#range(this.#level) * effective.rangeMultiplier + 0.5, this.#targetType)
+					targets = globalThis.map.unitsInRange(this, this.#range(this.#level) * effective.rangeMultiplier + HIDDEN_RANGE_ADDED, this.#targetType)
 			}
 			if (targets.length !== 0) {
 				while (! this.inCoolDown) {

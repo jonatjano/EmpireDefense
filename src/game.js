@@ -1,10 +1,8 @@
 import utils from "./utils.js";
-import Enemy from "./entity/Enemy.js";
-import Building from "./Building.js";
 import Map from "./map/Map.js"
 import draw from "./UI/draw.js";
 import "./UI/events.js"
-import GroundEnemy from "./entity/GroundEnemy.js";
+import {FlyingEnemy, GroundEnemy} from "./entity/enemyExport.js";
 
 let lastLoop = 0
 const MONSTER_INTERVAL = 2000
@@ -22,6 +20,7 @@ const gameLoop = time => {
 
 	if (time % MONSTER_INTERVAL < lastLoop % MONSTER_INTERVAL || lastLoop === 0) {
 		globalThis.map.addUnit(new GroundEnemy(globalThis.map.spawns[0].x + 0.5, globalThis.map.spawns[0].y + 0.5))
+		globalThis.map.addUnit(new FlyingEnemy(globalThis.map.spawns[0].x + 0.5, globalThis.map.spawns[0].y + 0.5))
 	}
 
 	draw(globalThis.map)
@@ -29,7 +28,7 @@ const gameLoop = time => {
 	lastLoop = time
 	requestAnimationFrame(gameLoop)
 }
-globalThis.map.addUnit(new Enemy(globalThis.map.spawns[0].x + 0.5, globalThis.map.spawns[0].y + 0.5))
+globalThis.map.addUnit(new FlyingEnemy(globalThis.map.spawns[0].x + 0.5, globalThis.map.spawns[0].y + 0.5))
 gameLoop(0)
 
 // board[2][2].build(Building.archerTower(2, 2))
